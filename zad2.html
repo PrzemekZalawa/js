@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table, tr, td, th{
+            border-collapse: collapse;
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" name="form">
+        imie:<input name="imie" type="text"/><br/>
+        nazwisko:<input name="nazwisko" type="text"/><br/>
+        pesel:<input type="text" name="pesel"/><br/>
+        specjalizacja:<input type="text" name="specjalizacja"/><br/>
+        oddzial:<input type="text" name="oddzial"/><br/>
+        <button type="button" onclick="handleForm()">wyslij</button>
+    </form>
+    <div id="zawartosc">
+    </div>
+    <script>
+    function pracownik(imie,nazwisko,pesel){
+    this.imie = imie;
+    this.nazwisko = nazwisko;
+    this.pesel = pesel;
+    this.zwrocDane = function(){
+        return this.imie+" "+this.nazwisko+" "+this.pesel;
+    }
+    Object.defineProperty(this,"imie",
+    {
+        get: function(){
+            return imie;
+        },
+        set: function(value){
+            imie = value;
+        }
+    })
+    Object.defineProperty(this,"nazwisko",
+    {
+        get: function(){
+            return nazwisko;
+        },
+        set: function(value){
+            nazwisko = value;
+        }
+    })
+    Object.defineProperty(this,"pesel",
+    {
+        get: function(){
+            return pesel;
+        },
+        set: function(value){
+            pesel = value;
+        }
+    })
+    
+}
+    function lekarz(imie,nazwisko,pesel,specjalizacja){ 
+    pracownik.call(this,imie,nazwisko,pesel)
+    this.specjalizacja = specjalizacja;
+    Object.defineProperty(this,"specjalizacja",
+    {
+        get: function(){
+            return specjalizacja;
+        },
+        set: function(value){
+            specjalizacja = value;
+        }
+    })
+    this.zwrocDane = function(){
+        return this.imie+" "+this.nazwisko+" "+this.pesel+" "+this.specjalizacja;
+    }
+}
+    function ordynator(imie,nazwisko,pesel,specjalizacja,oddzial){ 
+    lekarz.call(this,imie,nazwisko,pesel,specjalizacja)
+    this.oddzial = oddzial;
+    Object.defineProperty(this,"oddzial",
+    {
+        get: function(){
+            return oddzial;
+        },
+        set: function(value){
+            oddzial = value;
+        }
+    })
+    this.zwrocDane = function(){
+        return this.imie+" "+this.nazwisko+" "+this.pesel+" "+this.specjalizacja+" "+this.oddzial;
+    }
+}
+
+
+
+
+function handleForm(){
+    const output= document.getElementById("zawartosc")
+    const formularz = document.forms["form"];
+    let newEniu;
+    if(formularz["imie"].value!="" && formularz["nazwisko"].value!="",formularz["pesel"].value!="")
+    {
+    if(formularz["oddzial"].value!="" && formularz["specjalizacja"].value!=""){
+         newEniu = new ordynator(
+            formularz["imie"].value,formularz["nazwisko"].value,formularz["pesel"].value,
+            formularz["specjalizacja"].value,formularz["oddzial"].value)
+            output.innerHTML = "<table><tr><th>imie</th><th>nazwisko</th><th>pesel</th><th>specjalizacja</th><th>oddzial</th></tr><tr><td>"+
+                newEniu.imie+"</td><td>"+newEniu.nazwisko+"</td><td>"+
+                newEniu.pesel+"</td><td>"+newEniu.specjalizacja+"</td><td>"+newEniu.oddzial+"</td></tr></table>";
+    }
+    else if(formularz["specjalizacja"].value!=""){
+         newEniu = new lekarz(
+            formularz["imie"].value,formularz["nazwisko"].value,formularz["pesel"].value,
+            formularz["specjalizacja"].value)
+            output.innerHTML = "<table><tr><th>imie</th><th>nazwisko</th><th>pesel</th><th>specjalizacja</th></tr><tr><td>"+
+                newEniu.imie+"</td><td>"+newEniu.nazwisko+"</td><td>"+
+                newEniu.pesel+"</td><td>"+newEniu.specjalizacja+"</td></tr></table>";
+    }
+    else{
+         newEniu = new pracownik(
+            formularz["imie"].value,formularz["nazwisko"].value,formularz["pesel"].value)
+            output.innerHTML = "<table><tr><th>imie</th><th>nazwisko</th><th>pesel</th></tr><tr><td>"+
+                newEniu.imie+"</td><td>"+newEniu.nazwisko+"</td><td>"+
+                newEniu.pesel+"</td></tr></table>";
+    }
+    }
+    console.log(newEniu)
+}
+
+    </script>
+</body>
+</html>

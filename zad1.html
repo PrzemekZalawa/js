@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,
+        tr,
+        td,
+        th {
+            border-collapse: collapse;
+            border: 2px solid black;
+
+        }
+    </style>
+</head>
+
+<body>
+    <form>
+        szerokosc:<input type="number" id="szerokosc" />
+        wysokosc:<input type="number" id="wysokosc" />
+        dlugosc:<input type="number" id="dlugosc" />
+        <button type="button" onclick="handleForm()">oblicz</button>
+    </form>
+    <div id="wyniki"></div>
+    <script>
+        const szerokoscForm = document.getElementById("szerokosc");
+        const wysokoscForm = document.getElementById("wysokosc");
+        const dlugoscForm = document.getElementById("dlugosc");
+
+        const wyniki = document.getElementById("wyniki");
+
+        function prostopadloscian(szerokosc, wysokosc, dlugosc) {
+            this.szerokosc = szerokosc;
+            this.wysokosc = wysokosc;
+            this.dlugosc = dlugosc;
+            Object.defineProperty(this, "szerokosc", {
+                get: function () { return szerokosc },
+                set: function (newValue) { szerokosc = newValue }
+            })
+            Object.defineProperty(this, "wysokosc", {
+                get: function () { return wysokosc },
+                set: function (newValue) { wysokosc = newValue }
+            })
+            Object.defineProperty(this, "dlugosc", {
+                get: function () { return dlugosc },
+                set: function (newValue) { dlugosc = newValue }
+            })
+
+            this.obliczPolePowierzchni = function () {
+                return this.szerokosc * this.wysokosc * 2 +
+                    this.szerokosc * this.dlugosc * 2 +
+                    this.wysokosc * this.dlugosc * 2
+            }
+            this.obliczDlugoscKrawedzi = function () {
+                return this.szerokosc * 4 + this.wysokosc * 4 + this.dlugosc * 4
+            }
+            this.obliczObjetosc = function () {
+                return this.szerokosc * this.wysokosc * this.dlugosc
+            }
+        }
+        function handleForm() {
+                
+            if (szerokoscForm.value > 0 && dlugoscForm.value > 0 && wysokoscForm.value > 0) {
+                const newProstopadloscian = new prostopadloscian(szerokoscForm.value, wysokoscForm.value, dlugoscForm.value)
+                wyniki.innerHTML =
+                    "<table><tr><td>Pole powierzchni:</td><td>" +
+                    newProstopadloscian.obliczPolePowierzchni() +
+                    "</td></tr><tr><td>Dlugosc krawedzi:</td><td>" +
+                    newProstopadloscian.obliczDlugoscKrawedzi() +
+                    "</td></tr><tr><td>objetosc:</td><td>" +
+                    newProstopadloscian.obliczObjetosc() +
+                    "</td></tr></table>";
+                    console.log(newProstopadloscian.szerokosc)
+            }
+
+        }
+
+
+    </script>
+</body>
+
+</html>
